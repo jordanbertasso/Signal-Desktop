@@ -293,9 +293,16 @@ export class CallingClass {
     });
 
     ipcRenderer.on('quit', () => {
-      for (const conversationId of Object.keys(this.callsByConversation)) {
-        this.hangup(conversationId);
-      }
+      window.showConfirmationDialog({
+        confirmStyle: 'negative',
+        message: window.i18n('deleteWarning'),
+        okText: window.i18n('delete'),
+        resolve: () => {
+          for (const conversationId of Object.keys(this.callsByConversation)) {
+            this.hangup(conversationId);
+          }
+        },
+      });
     });
 
     this.cleanExpiredGroupCallRingsAndLoop();
